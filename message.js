@@ -46,6 +46,36 @@ function handleMessage(sender_psid, received_message) {
     usersModel.findOne({ sender_psid }, function (err, user) {
         if (!user) usersModel.create({ sender_psid }, () => { })
     })
+    let response;
+    if (received_message.text) {
+        let infector = parseInt(received_message.text);
+        apiCovid19().then(res => {
+            if (!isNaN(infector)) {
+                let { cases, tableCases } = res.data.vietnam;
+                let findCase = `BN${infector - 1}:`
+                let sliceCases = `BN${infector}:`;
+                let showInfection = tableCases.slice(tableCases.indexOf(sliceCases) - 3, tableCases.indexOf(findCase) - 3);
+                if(infector <= 16){
+                    response = {
+                        "text": `16 người mắc COVID-19 tính từ ngày 23/1 đến ngày 13/2 đã được chữa khỏi bệnh hoàn toàn (giai đoạn 1).\nThông tin chỉ cập nhật số bệnh nhân trong giao đoạn 2.`
+                    }
+                } else if(infector > cases){
+                    response = {
+                        "text": `Hiện tại chỉ có ${cases} bệnh nhân đã được chuẩn đoán mắc Covid-19.`
+                    }
+                }else {
+                    response = {
+                        "text": `${showInfection}`
+                    }
+                }
+            } else {
+                response = {
+                    "text": `Lỗi cú pháp, vui lòng thử lại!`
+                }
+            }
+            callSendAPI(sender_psid, response);
+        })
+    }
 }
 
 // Handles messaging_postbacks events
