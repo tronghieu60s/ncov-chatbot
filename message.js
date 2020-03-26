@@ -113,4 +113,6 @@ function senderAction(sender_psid, action) {
     });
 }
 
+handleMessage = () => { console.log("handleMessage"); }
+
 module.exports = { handleMessage, handlePostback, covidAutoUpdate }
