@@ -7,6 +7,10 @@ const setProfile = require('./setProfile');
 setProfile();
 const { covidAutoUpdate } = require('./message');
 covidAutoUpdate();
+setInterval(() => {
+  covidAutoUpdate();
+}, 300000);
+
 
 const indexRouter = require('./routes/index');
 
