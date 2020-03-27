@@ -4,44 +4,6 @@ const formatDate = require('./formatDate');
 const covidModel = require('./models/covid19');
 const usersModel = require('./models/users');
 
-function covidAutoUpdate() {
-    apiCovid19().then(res => {
-        covidModel.findOne({ id: process.env.PAGE_ACCESS_TOKEN }, function (err, covid) {
-            let { cases } = covid.data.data.vietnam;
-            let date = new Date();
-            if (res.data.vietnam.cases != cases) {
-                covidModel.findOneAndUpdate({ id: process.env.PAGE_ACCESS_TOKEN }, { data: res, date }, () => { });
-                usersModel.find({}, function (err, users) {
-                    let response;
-                    for (const user of users) {
-                        response = {
-                            "text": `⚠️⚠️⚠️ THÔNG BÁO TÌNH HÌNH DỊCH VIÊM PHỔI CẤP DO CHỦNG MỚI CỦA VIRUS CORONA 🦠🦠🦠\n➖ Số người nhiễm: ${res.data.global.cases}\n➖ Tử vong: ${res.data.global.deaths}\n➖ Bình phục: ${res.data.global.recovered}`
-                        }
-                        callSendAPI(user.sender_psid, response);
-
-                        setTimeout(function () {
-                            response = {
-                                "text": `Số ca mắc COVID-19 tại Việt Nam có chiều hướng gia tăng: \n⚠️ Số người nhiễm: ${res.data.vietnam.cases}\n☠️ Tử vong: ${res.data.vietnam.deaths}\n🍀 Bình phục: ${res.data.vietnam.recovered}\n\n⏱ Cập nhật lúc : ${formatDate(date)}\n☑️ Dữ liệu được cập nhật mỗi 5 phút.`
-                            }
-                            callSendAPI(user.sender_psid, response);
-                        }, 800)
-
-                        setTimeout(function () {
-                            let { tableCases } = res.data.vietnam;
-                            let sliceCases = `BN${cases}`;
-                            let newInfection = tableCases.slice(0, tableCases.indexOf(sliceCases) - 3);
-                            response = {
-                                "text": `Số ca mắc COVID-19 tại Việt Nam hiện nay gồm có (xếp theo ca bệnh mới nhất):\n${newInfection}`
-                            }
-                            callSendAPI(user.sender_psid, response);
-                        }, 1600)
-                    }
-                })
-            }
-        })
-    })
-}
-
 function handleMessage(sender_psid, received_message) {
     usersModel.findOne({ sender_psid }, function (err, user) {
         if (!user) usersModel.create({ sender_psid }, () => { })
@@ -55,17 +17,23 @@ function handleMessage(sender_psid, received_message) {
                 let findCase = `BN${infector - 1}:`
                 let sliceCases = `BN${infector}:`;
                 let showInfection = tableCases.slice(tableCases.indexOf(sliceCases) - 3, tableCases.indexOf(findCase) - 3);
-                if(infector <= 16){
+                if (infector <= 16) {
                     response = {
                         "text": `16 người mắc COVID-19 tính từ ngày 23/1 đến ngày 13/2 đã được chữa khỏi bệnh hoàn toàn (giai đoạn 1).\nThông tin chỉ cập nhật số bệnh nhân trong giao đoạn 2.`
                     }
-                } else if(infector > cases){
+                } else if (infector > cases) {
                     response = {
                         "text": `Hiện tại chỉ có ${cases} bệnh nhân đã được chuẩn đoán mắc Covid-19.`
                     }
-                }else {
-                    response = {
-                        "text": `${showInfection}`
+                } else {
+                    if (showInfection !== "") {
+                        response = {
+                            "text": `${showInfection}`
+                        }
+                    } else {
+                        response = {
+                            "text": `Không có thông tin của bệnh nhân này.`
+                        }
                     }
                 }
             } else {
@@ -158,4 +126,4 @@ function senderAction(sender_psid, action) {
     });
 }
 
-module.exports = { handleMessage, handlePostback, covidAutoUpdate }
+module.exports = { handleMessage, handlePostback, callSendAPI }

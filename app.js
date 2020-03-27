@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const setProfile = require('./setProfile');
 setProfile();
-const { covidAutoUpdate } = require('./message');
+const covidAutoUpdate = require('./covidAutoUpdate');
 covidAutoUpdate();
 setInterval(() => {
   covidAutoUpdate();
