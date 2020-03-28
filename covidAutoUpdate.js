@@ -25,16 +25,6 @@ module.exports = function covidAutoUpdate() {
                             }
                             callSendAPI(user.sender_psid, response);
                         }, 800)
-
-                        setTimeout(function () {
-                            let { tableCases } = res.data.vietnam;
-                            let sliceCases = `BN${cases}`;
-                            let newInfection = tableCases.slice(0, tableCases.indexOf(sliceCases) - 3);
-                            response = {
-                                "text": `Số ca mắc COVID-19 tại Việt Nam hiện nay gồm có (xếp theo ca bệnh mới nhất):\n${newInfection}`
-                            }
-                            callSendAPI(user.sender_psid, response);
-                        }, 1600)
                     }
                 })
             }

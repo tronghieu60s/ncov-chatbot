@@ -16,7 +16,7 @@ function handleMessage(sender_psid, received_message) {
                 let { cases, tableCases } = res.data.vietnam;
                 let findCase = `BN${infector - 1}:`
                 let sliceCases = `BN${infector}:`;
-                let showInfection = tableCases.slice(tableCases.indexOf(sliceCases) - 3, tableCases.indexOf(findCase) - 3);
+                let showInfection = tableCases.slice(tableCases.indexOf(sliceCases), tableCases.indexOf(findCase) - 3);
                 if (infector <= 16) {
                     response = {
                         "text": `16 người mắc COVID-19 tính từ ngày 23/1 đến ngày 13/2 đã được chữa khỏi bệnh hoàn toàn (giai đoạn 1).\nThông tin chỉ cập nhật số bệnh nhân trong giao đoạn 2.`
@@ -28,7 +28,7 @@ function handleMessage(sender_psid, received_message) {
                 } else {
                     if (showInfection !== "") {
                         response = {
-                            "text": `${showInfection}`
+                            "text": `* ${showInfection}`
                         }
                     } else {
                         response = {
