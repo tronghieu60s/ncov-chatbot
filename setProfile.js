@@ -10,7 +10,7 @@ module.exports = function setProfile() {
         "persistent_menu": [
             {
                 "locale": "default",
-                "composer_input_disabled": false,
+                "composer_input_disabled": true,
                 "call_to_actions": [
                     {
                         "title": "COVID-19",
@@ -21,7 +21,13 @@ module.exports = function setProfile() {
                         "title": "Bộ Y Tế Việt Nam",
                         "type": "web_url",
                         "url": "https://ncov.moh.gov.vn/",
-                        "webview_height_ratio": "full"
+                        "webview_height_ratio": "tall"
+                    },
+                    {
+                        "title": "Tác Giả",
+                        "type": "web_url",
+                        "url": "https://tronghieuit.com/",
+                        "webview_height_ratio": "tall"
                     }
                 ]
             }
