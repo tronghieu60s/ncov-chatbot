@@ -10,6 +10,6 @@ module.exports = function formatDate(date) {
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
     minutes = minutes < 10 ? '0' + minutes : minutes;
-    var strTime = `${day}/${month}/${year} ${hours}:${minutes} ${ampm}`;
+    var strTime = `${hours}:${minutes} ${ampm} ${day}/${month}/${year} `;
     return strTime;
 }

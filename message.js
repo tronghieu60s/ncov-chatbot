@@ -36,17 +36,17 @@ function handlePostback(sender_psid, received_postback) {
                         callSendAPI(sender_psid, response);
                         setTimeout(function () {
                             response = {
-                                "text": `Số ca mắc COVID-19 tại Việt Nam có chiều hướng gia tăng: \n⚠️ Nhiễm bệnh: ${res.data.vietnam.cases}\n☠️ Tử vong: ${res.data.vietnam.deaths}\n🍀 Bình phục: ${res.data.vietnam.recovered}\n\n⏱ Cập nhật lúc : ${formatDate(date)}\n☑️ Dữ liệu được cập nhật mỗi 5 phút.`
+                                "text": `Số ca mắc COVID-19 tại Việt Nam có chiều hướng gia tăng: \n⚠️ Nhiễm bệnh: ${res.data.vietnam.cases}\n☠️ Tử vong: ${res.data.vietnam.deaths}\n🍀 Bình phục: ${res.data.vietnam.recovered}\n\n⏱ Cập nhật vào lúc: ${formatDate(date)}\n☑️ Dữ liệu được cập nhật mỗi 5 phút.`
                             }
                             callSendAPI(sender_psid, response);
                         }, 800)
                         setTimeout(function () {
                             let top_country = "";
                             for (let index = 0; index < res.data.countries.length; index++) {
-                                top_country += `\n⚠️ ${res.data.countries[index].c_name}: (${res.data.countries[index].c_cases} - ${res.data.countries[index].c_deaths})`
+                                top_country += `\n⚠️ ${res.data.countries[index].c_name}: ${res.data.countries[index].c_cases} ( ${res.data.countries[index].c_deaths})`
                             }
                             response = {
-                                "text": `Một số quốc gia khác:\n(Tên - Ca Nhiễm - Số Người Chết):${top_country}`
+                                "text": `Một số quốc gia khác:\n(Tên - Ca Nhiễm - Số Người Chết)${top_country}`
                             }
                             callSendAPI(sender_psid, response);
                         }, 1600)
